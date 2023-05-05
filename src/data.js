@@ -6,7 +6,7 @@ import './App2.css';
 function MyData() {
     const [nobelPrizes, setNobelPrizes] = useState([]);
     const [awardYears, setAwardYears] = useState([]);
-    const [fullname, setFullname] = useState([]);
+
     const [selectedYear, setSelectedYear] = useState('');
     const [totalPrizeAmount, setTotalPrizeAmount] = useState({});
     const [displayedData, setDisplayedData] = useState([]);
@@ -28,15 +28,21 @@ function MyData() {
     useEffect(() => {
         const years = nobelPrizes.map(prize => prize.awardYear);
         setAwardYears([...new Set(years)]);
-        const lature = nobelPrizes.map(latur => latur.laureates);
-        setLaureates([...new Set(lature)]);
-    }, [nobelPrizes, laureates]);
+
+    }, [nobelPrizes]);
 
 
 
     useEffect(() => {
         const yearData = nobelPrizes.filter(prize => prize.awardYear === selectedYear);
-
+        const yearData2 = nobelPrizes.filter(prize => prize.awardYear === selectedYear).flatMap(prize =>
+            prize.laureates.map(laureate => ({
+                fullName: laureate.fullName ? laureate.fullName.en : '',
+                motivation: laureate.motivation ? laureate.motivation.en : '',
+                category: laureate.categoryFullName ? laureate.categoryFullName.en : '',
+                awardYear: prize.awardYear
+            })));
+        setLaureates(yearData2);
         const total = yearData.reduce((accumulator, currentValue) => {
             return accumulator + parseFloat(currentValue.prizeAmount);
         }, 0);
@@ -50,6 +56,7 @@ function MyData() {
     const handleApplyClick = () => {
         const filteredData = awardYears.filter(year => year === selectedYear);
         const yearData = nobelPrizes.filter(prize => prize.awardYear === selectedYear);
+        const laureData = nobelPrizes.filter(prize => prize.laureate === selectedYear);
         const total = yearData.reduce((accumulator, currentValue) => {
             return accumulator + parseFloat(currentValue.prizeAmount);
         }, 0);
@@ -59,7 +66,11 @@ function MyData() {
 
     return (
         <div className="container">
-            <div className="header"> Nobel Prizes {selectedYear}</div>
+            <div className="header">
+                <h1>
+                    Nobel Prizes {selectedYear}
+                </h1>
+            </div>
             <div class="content">
                 <div className="filter">
                     <label htmlFor="year">Select a year:</label>
@@ -84,22 +95,30 @@ function MyData() {
                     </h3>}
                 </div>
 
-                <div className="detail">
-                    <table>
-                        <thead>
-                            <tr>
+                {selectedYear == 'All' ? null :
+                    <div className="detail">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Full Name</th>
+                                    <th>Motivation</th>
+                                    <th>Award Year</th>
 
-                                <th>Full Name</th>
-                                <th>motivation</th>
-                                <th>AwardYear</th>
-                                <th>Category FullName</th>
-                            </tr>
-                        </thead>
-                        <tbody>
 
-                        </tbody>
-                    </table>
-                </div>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {laureates.map((laureate, index) => (
+                                    <tr key={index}>
+                                        <td>{laureate.fullName}</td>
+                                        <td>{laureate.motivation}</td>
+                                        <td>{laureate.awardYear}</td>
+
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>}
             </div>
 
 

@@ -4,6 +4,33 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    font-family: "Times New Roman", Times, serif;
+}
+
+table {
+    border-collapse: collapse;
+    margin: 0 auto;
+    font-size: 14px;
+    font-family: Arial, sans-serif;
+}
+
+th {
+    background-color: #f2f2f2;
+    text-align: left;
+    padding: 8px;
+}
+
+td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tr:hover {
+    background-color: #ddd;
 }
 
 .detail {
@@ -27,8 +54,9 @@
 }
 
 .header {
-    background-color: gray;
+    background-color: rgb(238, 233, 233);
     height: 20%;
+    text-align: center;
 }
 
 .filter {
