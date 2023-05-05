@@ -32,15 +32,11 @@ function MyData() {
         setLaureates([...new Set(lature)]);
     }, [nobelPrizes, laureates]);
 
-    useEffect(() => {
-        const name = laureates.map(names => names.categoryFullName.map(e => e.en));
-        setFullname([...new Set(name)]);
-    }, []);
+
 
     useEffect(() => {
-        const yearData = nobelPrizes.filter(prize => prize.awardYear === selectedYear).flatMap(prize => prize.laureates)
-            .map(laureates => laureates.knowName.en);
-        setLaureates(yearData);
+        const yearData = nobelPrizes.filter(prize => prize.awardYear === selectedYear);
+
         const total = yearData.reduce((accumulator, currentValue) => {
             return accumulator + parseFloat(currentValue.prizeAmount);
         }, 0);
